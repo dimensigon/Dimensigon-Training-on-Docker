@@ -4,7 +4,7 @@ FROM python:3.6
 EXPOSE 5000
 
 # Install sudo and add dimensigon user
-RUN apt-get update && apt-get install -y sudo && \
+RUN apt-get update && apt-get install -y sudo vim && \
     useradd -m dimensigon && \
     echo "dimensigon ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
@@ -34,11 +34,17 @@ port = 5000\n\
 " > /home/dimensigon/.dshell && \
     chown dimensigon:dimensigon /home/dimensigon/.dshell
 
+# ASCIINEMA, to record tutorials
+RUN su - dimensigon -c "~/venv/bin/pip install asciinema"
+
 # Switch to the dimensigon user
 USER dimensigon
 
 # Set the working directory to the dimensigon user's home directory
 WORKDIR /home/dimensigon
+
+# Clean up
+RUN rm /home/dimensigon/dimensigon-py36.tar.gz
 
 # Set ENTRYPOINT to start a bash shell
 ENTRYPOINT ["/bin/bash", "-l"]
