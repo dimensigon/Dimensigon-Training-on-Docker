@@ -27,7 +27,7 @@ RUN su - dimensigon -c "~/venv/bin/pip install /home/dimensigon/dimensigon-py36.
 # Create .dshell configuration file
 RUN echo "\
 [AUTH]\n\
-username = dm\n\
+username = root\n\
 [REMOTE]\n\
 server = 127.0.0.1\n\
 port = 5000\n\
