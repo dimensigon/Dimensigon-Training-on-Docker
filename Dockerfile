@@ -1,7 +1,7 @@
 FROM python:3.6
 
 # Expose port 5000 (adjust as needed)
-EXPOSE 5000
+EXPOSE 20194
 
 # Install sudo and add dimensigon user
 RUN apt-get update && apt-get install -y sudo vim && \
@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y sudo vim && \
     echo "dimensigon ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Copy the tar.gz file to HOME dir.
-ADD --chown=dimensigon:dimensigon https://www.dimensigon.com/wp-content/dm-download/dimensigon-py36.tar.gz /home/dimensigon/
+ADD --chown=dimensigon:dimensigon https://www.dimensigon.com/wp-content/dm-download/dimensigon-py36-220225.tar.xz /home/dimensigon/
 
 # Set up Python Virtual Environment
 RUN su - dimensigon -c "python3 -m venv --prompt dimensigon ~/venv"
@@ -22,7 +22,7 @@ RUN su - dimensigon -c "~/venv/bin/pip install --upgrade pip"
 RUN su - dimensigon -c "~/venv/bin/pip install pyperclip"
 
 # Install dimensigon package from the tar.gz file
-RUN su - dimensigon -c "~/venv/bin/pip install /home/dimensigon/dimensigon-py36.tar.gz"
+RUN su - dimensigon -c "~/venv/bin/pip install /home/dimensigon/dimensigon-py36-220225.tar.xz"
 
 # Create .dshell configuration file
 RUN echo "\
@@ -30,12 +30,11 @@ RUN echo "\
 username = root\n\
 [REMOTE]\n\
 server = 127.0.0.1\n\
-port = 5000\n\
 " > /home/dimensigon/.dshell && \
     chown dimensigon:dimensigon /home/dimensigon/.dshell
 
 # ASCIINEMA, to record tutorials
-RUN su - dimensigon -c "~/venv/bin/pip install asciinema"
+# RUN su - dimensigon -c "~/venv/bin/pip install asciinema"
 
 # Switch to the dimensigon user
 USER dimensigon
@@ -44,7 +43,7 @@ USER dimensigon
 WORKDIR /home/dimensigon
 
 # Clean up
-RUN rm /home/dimensigon/dimensigon-py36.tar.gz
+RUN rm /home/dimensigon/dimensigon-py36-220225.tar.xz
 
 # Set ENTRYPOINT to start a bash shell
 ENTRYPOINT ["/bin/bash", "-l"]
